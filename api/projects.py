@@ -1,4 +1,4 @@
-"""椤圭洰绠＄悊鎺ュ彛"""
+"""项目管理接口"""
 from flask import request, jsonify
 from api import api_bp
 from database import db
@@ -15,6 +15,7 @@ def list_projects():
             "id": p.id,
             "code": p.code,
             "name": p.name,
+            "center_name": p.center_name or "",
             "tasks": [{
                 "id": t.id,
                 "task_name": t.task_name,
@@ -28,13 +29,13 @@ def create_project():
     data = request.get_json() or {}
     code = data.get("code", "").strip().upper()
     name = data.get("name", "").strip()
-    center_name = data.get('center_name', '')
-    tasks = data.get("tasks", [])  # ["绛涢€夊叆缁?, "瀹屾垚杩涘害"]
+    center_name = data.get("center_name", "")
+    tasks = data.get("tasks", [])
 
     if not code or not name:
-        return jsonify({"code": 400, "msg": "椤圭洰缂栧彿鍜屽悕绉颁笉鑳戒负绌?})
+        return jsonify({"code": 400, "msg": "项目编号和名称不能为空"})
     if Project.query.filter_by(code=code).first():
-        return jsonify({"code": 400, "msg": "椤圭洰缂栧彿宸插瓨鍦?})
+        return jsonify({"code": 400, "msg": "项目编号已存在"})
 
     proj = Project(code=code, name=name, center_name=center_name)
     db.session.add(proj)
@@ -47,7 +48,7 @@ def create_project():
             db.session.add(task)
 
     db.session.commit()
-    return jsonify({"code": 0, "msg": "鍒涘缓鎴愬姛", "data": {"id": proj.id}})
+    return jsonify({"code": 0, "msg": "创建成功", "data": {"id": proj.id}})
 
 
 @api_bp.route("/projects/<int:project_id>", methods=["PUT"])
@@ -58,8 +59,10 @@ def update_project(project_id):
         proj.name = data["name"].strip()
     if "code" in data:
         proj.code = data["code"].strip().upper()
+    if "center_name" in data:
+        proj.center_name = data["center_name"].strip()
     if "tasks" in data:
-        # 鏇挎崲浠诲姟鍒楄〃
+        # 替换任务列表
         ProjectTask.query.filter_by(project_id=proj.id).delete()
         for i, task_name in enumerate(data["tasks"]):
             task_name = task_name.strip()
@@ -67,7 +70,7 @@ def update_project(project_id):
                 task = ProjectTask(project_id=proj.id, task_name=task_name, sort_order=i)
                 db.session.add(task)
     db.session.commit()
-    return jsonify({"code": 0, "msg": "鏇存柊鎴愬姛"})
+    return jsonify({"code": 0, "msg": "更新成功"})
 
 
 @api_bp.route("/projects/<int:project_id>", methods=["DELETE"])
@@ -75,5 +78,4 @@ def delete_project(project_id):
     proj = Project.query.get_or_404(project_id)
     proj.is_active = False
     db.session.commit()
-    return jsonify({"code": 0, "msg": "宸茬鐢?})
-
+    return jsonify({"code": 0, "msg": "已禁用"})
