@@ -52,6 +52,7 @@ def create_leave():
     user_id = data.get("user_id")
     leave_date_str = data.get("leave_date")
     leave_type = data.get("leave_type", "事假")
+    duration_hours = data.get("duration_hours", 8.0)
     remark = data.get("remark", "")
 
     if not all([user_id, leave_date_str]):
@@ -66,9 +67,10 @@ def create_leave():
     record = LeaveRecord.query.filter_by(user_id=user_id, leave_date=leave_date).first()
     if record:
         record.leave_type = leave_type
+        record.duration_hours = duration_hours
         record.remark = remark
     else:
-        record = LeaveRecord(user_id=user_id, leave_date=leave_date, leave_type=leave_type, remark=remark)
+        record = LeaveRecord(user_id=user_id, leave_date=leave_date, leave_type=leave_type, duration_hours=duration_hours, remark=remark)
         db.session.add(record)
 
     db.session.commit()
@@ -98,6 +100,7 @@ def query_leaves():
             "user_name": r.user.name if r.user else "",
             "leave_date": r.leave_date.isoformat(),
             "leave_type": r.leave_type,
+            "duration_hours": r.duration_hours,
             "remark": r.remark,
         } for r in records]
     })

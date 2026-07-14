@@ -1,4 +1,4 @@
-﻿from datetime import datetime, date
+from datetime import datetime, date
 from database import db
 
 
@@ -33,6 +33,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(20), nullable=False, unique=True)  # 项目缩写
     name = db.Column(db.String(200), nullable=False)
+    center_name = db.Column(db.String(100), default="")  # 中心名称
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
     tasks = db.relationship("ProjectTask", backref="project", lazy=True, cascade="all,delete")
@@ -85,6 +86,7 @@ class LeaveRecord(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     leave_date = db.Column(db.Date, nullable=False)
     leave_type = db.Column(db.String(50), default="事假")  # 事假/病假/年假/调休
+    duration_hours = db.Column(db.Float, default=8.0)  # 请假小时数
     remark = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.now)
 
