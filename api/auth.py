@@ -1,4 +1,4 @@
-﻿"""认证接口 - 支持首次登录自动注册"""
+"""认证接口 - 支持首次登录自动注册"""
 import hashlib
 from datetime import datetime, timedelta
 from flask import request, jsonify

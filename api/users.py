@@ -1,4 +1,4 @@
-﻿"""人员管理接口"""
+"""人员管理接口"""
 from flask import request, jsonify
 from api import api_bp
 from database import db

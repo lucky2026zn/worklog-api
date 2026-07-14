@@ -1,4 +1,4 @@
-﻿"""椤圭洰绠＄悊鎺ュ彛"""
+"""椤圭洰绠＄悊鎺ュ彛"""
 from flask import request, jsonify
 from api import api_bp
 from database import db

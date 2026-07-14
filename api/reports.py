@@ -1,4 +1,4 @@
-﻿"""日报/月报接口"""
+"""日报/月报接口"""
 from datetime import date
 from flask import request, jsonify
 from api import api_bp

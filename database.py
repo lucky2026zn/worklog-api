@@ -1,4 +1,4 @@
-﻿from flask import Flask
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from config import SQLALCHEMY_DATABASE_URI, SECRET_KEY, DEBUG

@@ -1,4 +1,4 @@
-﻿"""中国节假日工具 - 使用 timor.tech API"""
+"""中国节假日工具 - 使用 timor.tech API"""
 import json
 import urllib.request
 from datetime import date, timedelta

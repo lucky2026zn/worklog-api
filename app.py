@@ -1,4 +1,4 @@
-﻿"""工时记录系统 - Flask API 入口"""
+"""工时记录系统 - Flask API 入口"""
 import os
 from datetime import date
 from database import app, db

@@ -1,4 +1,4 @@
-﻿"""部门管理补充接口"""
+"""部门管理补充接口"""
 from flask import request, jsonify
 from api import api_bp
 from database import db
